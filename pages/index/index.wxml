@@ -1,7 +1,7 @@
 <!-- 首页 - 天气 + 收支概览 + 分类分析 + 最近记录 -->
 <view class="page">
 
-  <!-- ===== 天气卡片（最顶部） ===== -->
+  <!-- ===== 天气卡片 ===== -->
   <view class="weather-card" wx:if="{{weather.temp}}">
     <view class="weather-left">
       <text class="weather-emoji">{{weather.icon}}</text>
@@ -9,9 +9,9 @@
     </view>
     <view class="weather-right">
       <text class="weather-desc">{{weather.text}}</text>
-      <text class="weather-city">📍 北京</text>
+      <text class="weather-city">📍 {{weather.city}}</text>
       <text class="weather-detail">
-        体感 {{weather.feelsLike}}°  |  💧 {{weather.humidity}}%  |  🌬 {{weather.windDir}}{{weather.windScale}}级
+        🌡️ 体感 {{weather.feelsLike}}°  ·  💧 {{weather.humidity}}%  ·  🌬️ {{weather.windDir}}风 {{weather.windScale}}级
       </text>
     </view>
   </view>

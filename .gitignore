@@ -5,6 +5,9 @@ project.private.config.json
 *.log
 .DS_Store
 
+# 私有配置（含 API Key）
+utils/config.js
+
 # Office 临时文件
 ~$*
 

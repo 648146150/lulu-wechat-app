@@ -10,6 +10,7 @@ Page({
     isCurrentMonth: true,
     // 天气数据
     weather: {
+      city: '',
       temp: '',        // 温度，空串表示未加载
       feelsLike: '',
       text: '',
@@ -40,7 +41,7 @@ Page({
   loadWeather: function() {
     var that = this;
     console.log('开始请求天气...');
-    weather.fetchBeijingWeather(function(err, data) {
+    weather.fetchWeather(function(err, data) {
       if (err) {
         console.error('天气加载失败：', err);
       }
@@ -48,6 +49,7 @@ Page({
         console.log('天气数据：', data);
         that.setData({
           weather: {
+            city: data.city,
             temp: data.temp,
             feelsLike: data.feelsLike,
             text: data.text,
