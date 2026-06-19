@@ -1,0 +1,111 @@
+<!-- 首页 - 收支概览 + 分类分析 + 最近记录 -->
+<view class="page">
+
+  <!-- ===== 月份选择器 ===== -->
+  <view class="month-selector">
+    <view class="month-arrow" bindtap="prevMonth">◀</view>
+    <text class="month-text">{{currentYear}}年{{currentMonth}}月</text>
+    <view class="month-arrow {{isCurrentMonth ? 'arrow-disabled' : ''}}"
+          bindtap="nextMonth">▶</view>
+  </view>
+
+  <!-- ===== 汇总卡片 ===== -->
+  <view class="summary-card">
+    <view class="summary-row">
+      <view class="summary-item">
+        <text class="summary-label">收入</text>
+        <text class="summary-value money-income">+{{summary.income}}</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-label">支出</text>
+        <text class="summary-value money-expense">-{{summary.expense}}</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-label">结余</text>
+        <text class="summary-value {{summary.balance >= 0 ? 'money-income' : 'money-expense'}}">
+          {{summary.balance >= 0 ? '+' : ''}}{{summary.balance}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 添加按钮 ===== -->
+  <view class="add-btn" bindtap="goToAdd">
+    <text class="add-btn-icon">+</text>
+    <text class="add-btn-text">记一笔</text>
+  </view>
+
+  <!-- ===== 分类支出排行 ===== -->
+  <view class="section-card" wx:if="{{categoryList.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">支出分类排行</text>
+      <text class="section-sub">共 ¥{{categoryTotal}}</text>
+    </view>
+    <view class="category-list">
+      <view class="category-row" wx:for="{{categoryList}}" wx:key="category">
+        <text class="cat-emoji">{{item.emoji}}</text>
+        <text class="cat-name">{{item.category}}</text>
+        <view class="cat-bar-wrapper">
+          <view class="cat-bar" style="width: {{item.percent}}%;"></view>
+        </view>
+        <text class="cat-amount">¥{{item.amountText}}</text>
+        <text class="cat-percent">{{item.percent}}%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态：当月无支出 -->
+  <view class="section-card empty-card" wx:elif="{{summary.expense == 0}}">
+    <view class="section-header">
+      <text class="section-title">支出分类排行</text>
+    </view>
+    <view class="mini-empty">
+      <text>这个月还没有支出记录</text>
+    </view>
+  </view>
+
+  <!-- ===== 最近记录 ===== -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-title">最近记录</text>
+      <text class="section-more" bindtap="goToHistory">查看全部 ›</text>
+    </view>
+
+    <view class="empty" wx:if="{{recentRecords.length === 0}}">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">这个月还没有记录，记一笔吧！</text>
+    </view>
+
+    <view class="record-list" wx:else>
+      <view class="record-item" wx:for="{{recentRecords}}" wx:key="id">
+        <view class="record-left">
+          <text class="record-emoji">{{item.categoryEmoji}}</text>
+          <view class="record-info">
+            <text class="record-category">{{item.category}}</text>
+            <text class="record-date">{{item.date}}</text>
+          </view>
+        </view>
+        <text class="record-amount {{item.type === 'income' ? 'money-income' : 'money-expense'}}">
+          {{item.type === 'income' ? '+' : '-'}}{{item.amount}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 底部导航栏 ===== -->
+  <view class="tab-bar">
+    <view class="tab-item active">
+      <text class="tab-icon">🏠</text>
+      <text class="tab-label">首页</text>
+    </view>
+    <view class="tab-item" bindtap="goToAdd">
+      <text class="tab-icon">➕</text>
+      <text class="tab-label">记账</text>
+    </view>
+    <view class="tab-item" bindtap="goToHistory">
+      <text class="tab-icon">📋</text>
+      <text class="tab-label">账单</text>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,10 @@
+# 私有配置文件（含个人 AppID 等敏感信息）
+project.private.config.json
+
+# 微信开发者工具生成
+*.log
+.DS_Store
+
+# 依赖（以后如果用了 npm）
+node_modules/
+miniprogram_npm/

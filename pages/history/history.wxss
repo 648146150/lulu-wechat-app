@@ -1,0 +1,165 @@
+/* 账单列表页样式 */
+
+.page {
+  padding: 20rpx;
+  padding-bottom: 140rpx;
+}
+
+/* ===== 月份选择器 + 汇总 ===== */
+.month-bar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+
+.month-arrow {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #4CAF50;
+}
+
+.arrow-disabled {
+  color: #ccc;
+}
+
+.month-text {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin: 0 12rpx;
+  min-width: 160rpx;
+  text-align: center;
+}
+
+.month-summary-wrap {
+  margin-left: auto;
+  display: flex;
+  gap: 16rpx;
+}
+
+.month-in {
+  font-size: 24rpx;
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.month-out {
+  font-size: 24rpx;
+  color: #F44336;
+  font-weight: 500;
+}
+
+/* ===== 空状态 ===== */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0 60rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+.empty-btn {
+  background: #4CAF50;
+  color: #fff;
+  padding: 16rpx 60rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+
+/* ===== 日期分组 ===== */
+.group {
+  margin-bottom: 16rpx;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 8rpx;
+}
+
+.group-date {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.group-summary {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.group-records {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+}
+
+.record-emoji {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-category {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.record-note {
+  font-size: 22rpx;
+  color: #aaa;
+}
+
+.record-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+/* 底部提示 */
+.history-tip {
+  text-align: center;
+  padding: 40rpx 0;
+  font-size: 24rpx;
+  color: #bbb;
+}
