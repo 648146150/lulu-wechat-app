@@ -1,13 +1,23 @@
-// 首页 - 显示指定月份收支汇总、分类排行、最近记录
+// 首页 - 天气 + 指定月份收支汇总 + 分类排行 + 最近记录
 var storage = require('../../utils/storage');
+var weather = require('../../utils/weather');
 
 Page({
   data: {
     // 当前查看的年份和月份
     currentYear: 2026,
     currentMonth: 6,
-    // 是否当前月份（用于禁用"下个月"箭头）
     isCurrentMonth: true,
+    // 天气数据
+    weather: {
+      temp: '',        // 温度，空串表示未加载
+      feelsLike: '',
+      text: '',
+      icon: '',
+      windDir: '',
+      windScale: '',
+      humidity: ''
+    },
     // 收支汇总
     summary: {
       income: '0.00',
@@ -22,11 +32,36 @@ Page({
   },
 
   onShow: function() {
-    // 每次显示时重新加载
     this.loadData();
+    this.loadWeather();
   },
 
-  /** 加载所有数据 */
+  /** 加载天气 */
+  loadWeather: function() {
+    var that = this;
+    console.log('开始请求天气...');
+    weather.fetchBeijingWeather(function(err, data) {
+      if (err) {
+        console.error('天气加载失败：', err);
+      }
+      if (!err && data) {
+        console.log('天气数据：', data);
+        that.setData({
+          weather: {
+            temp: data.temp,
+            feelsLike: data.feelsLike,
+            text: data.text,
+            icon: data.icon,
+            windDir: data.windDir,
+            windScale: data.windScale,
+            humidity: data.humidity
+          }
+        });
+      }
+    });
+  },
+
+  /** 加载账单数据 */
   loadData: function() {
     var year = this.data.currentYear;
     var month = this.data.currentMonth;
@@ -41,17 +76,20 @@ Page({
       }
     });
 
-    // 2. 分类支出排行
+    // 2. 分类支出排行（只显示有支出的 Top 5）
     var breakdown = storage.getCategoryBreakdown(year, month);
-    var categoryList = breakdown.list.map(function(item) {
-      return {
-        category: item.category,
-        emoji: item.emoji,
-        amount: item.amount,
-        amountText: item.amount.toFixed(2),
-        percent: item.percent
-      };
-    });
+    var categoryList = breakdown.list
+      .filter(function(item) { return item.amount > 0; })
+      .slice(0, 5)
+      .map(function(item) {
+        return {
+          category: item.category,
+          emoji: item.emoji,
+          amount: item.amount,
+          amountText: item.amount.toFixed(2),
+          percent: item.percent
+        };
+      });
     this.setData({
       categoryList: categoryList,
       categoryTotal: breakdown.totalExpense.toFixed(2)
@@ -131,12 +169,10 @@ Page({
     return year === now.getFullYear() && month === (now.getMonth() + 1);
   },
 
-  /** 跳转记账页 */
   goToAdd: function() {
     wx.navigateTo({ url: '/pages/add/add' });
   },
 
-  /** 跳转账单页 */
   goToHistory: function() {
     wx.navigateTo({ url: '/pages/history/history' });
   }

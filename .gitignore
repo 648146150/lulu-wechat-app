@@ -5,6 +5,9 @@ project.private.config.json
 *.log
 .DS_Store
 
-# 依赖（以后如果用了 npm）
+# Office 临时文件
+~$*
+
+# 依赖
 node_modules/
 miniprogram_npm/

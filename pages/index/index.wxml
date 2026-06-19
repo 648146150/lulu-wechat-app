@@ -1,5 +1,20 @@
-<!-- 首页 - 收支概览 + 分类分析 + 最近记录 -->
+<!-- 首页 - 天气 + 收支概览 + 分类分析 + 最近记录 -->
 <view class="page">
+
+  <!-- ===== 天气卡片（最顶部） ===== -->
+  <view class="weather-card" wx:if="{{weather.temp}}">
+    <view class="weather-left">
+      <text class="weather-emoji">{{weather.icon}}</text>
+      <text class="weather-temp">{{weather.temp}}°</text>
+    </view>
+    <view class="weather-right">
+      <text class="weather-desc">{{weather.text}}</text>
+      <text class="weather-city">📍 北京</text>
+      <text class="weather-detail">
+        体感 {{weather.feelsLike}}°  |  💧 {{weather.humidity}}%  |  🌬 {{weather.windDir}}{{weather.windScale}}级
+      </text>
+    </view>
+  </view>
 
   <!-- ===== 月份选择器 ===== -->
   <view class="month-selector">

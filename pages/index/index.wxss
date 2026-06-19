@@ -79,6 +79,57 @@
   color: #FFCDD2;
 }
 
+/* ===== 天气卡片 ===== */
+.weather-card {
+  background: linear-gradient(135deg, #42A5F5, #64B5F6);
+  border-radius: 20rpx;
+  padding: 28rpx 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.weather-left {
+  display: flex;
+  align-items: center;
+  margin-right: 30rpx;
+  flex-shrink: 0;
+}
+
+.weather-emoji {
+  font-size: 64rpx;
+  margin-right: 12rpx;
+}
+
+.weather-temp {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.weather-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-desc {
+  font-size: 30rpx;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 4rpx;
+}
+
+.weather-city {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 2rpx;
+}
+
+.weather-detail {
+  font-size: 20rpx;
+  color: rgba(255,255,255,0.7);
+}
+
 /* ===== 添加按钮 ===== */
 .add-btn {
   display: flex;
@@ -142,10 +193,6 @@
 }
 
 /* ===== 分类排行 ===== */
-.category-list {
-  /* 无额外样式，由子元素撑开 */
-}
-
 .category-row {
   display: flex;
   align-items: center;
@@ -184,7 +231,7 @@
 
 .cat-amount {
   font-size: 24rpx;
-  color: #666;
+  color: #666666;
   width: 100rpx;
   text-align: right;
   flex-shrink: 0;
@@ -198,7 +245,6 @@
   flex-shrink: 0;
 }
 
-/* 无支出空状态 */
 .mini-empty {
   text-align: center;
   padding: 30rpx 0;
