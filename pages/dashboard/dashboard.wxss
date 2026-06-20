@@ -1,0 +1,72 @@
+.page { padding: 24rpx 24rpx 160rpx; }
+
+/* ===== 时间条 ===== */
+.time-row { display: flex; align-items: baseline; justify-content: space-between; padding: 6rpx 4rpx 28rpx; }
+.time-date { font-size: 52rpx; font-weight: 700; color: #333; }
+.time-week { font-size: 28rpx; color: #999; margin-left: 16rpx; font-weight: 400; }
+.time-clock { font-size: 44rpx; font-weight: 600; color: #333; }
+
+/* ===== 天气条 ===== */
+.weather-strip {
+  background: linear-gradient(135deg, #4A90D9, #6DB3F2);
+  border-radius: 36rpx; padding: 36rpx 44rpx; margin-bottom: 28rpx;
+  display: flex; align-items: center; color: #fff;
+  box-shadow: 0 8rpx 28rpx rgba(74,144,217,0.2);
+}
+.w-emoji { font-size: 72rpx; margin-right: 20rpx; flex-shrink: 0; }
+.w-temp { font-size: 60rpx; font-weight: 300; margin-right: 20rpx; flex-shrink: 0; }
+.w-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.w-desc { font-size: 30rpx; opacity: 0.9; }
+.w-city { font-size: 22rpx; opacity: 0.65; margin-top: 4rpx; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w-meta { margin-left: 16rpx; text-align: right; font-size: 22rpx; opacity: 0.65; line-height: 1.6; flex-shrink: 0; }
+
+/* ===== 卡片网格 ===== */
+.tool-grid { display: grid; gap: 24rpx; margin-bottom: 28rpx; }
+.tool-grid.cols2 { grid-template-columns: 1fr 1fr; }
+.tool-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.tool-card {
+  background: #fff; border-radius: 32rpx; padding: 40rpx 32rpx;
+  box-sizing: border-box; position: relative; overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+.card-icon { font-size: 72rpx; margin-bottom: 20rpx; display: block; }
+.card-label { font-size: 30rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; display: block; }
+.card-value { font-weight: 600; font-size: 44rpx; display: block; margin-bottom: 8rpx; }
+.card-assets-val { display: flex; align-items: center; gap: 12rpx; }
+.eye-icon { font-size: 32rpx; }
+.card-sub { font-size: 22rpx; color: #999; display: block; }
+
+/* 长按提示 */
+.card-hint { position: absolute; top: 14rpx; right: 18rpx; font-size: 20rpx; color: #ccc; }
+
+/* 各卡片顶部分隔色 */
+.card-bookkeeping { border-top: 6rpx solid #4CAF50; } .card-bookkeeping .card-value { color: #4CAF50; }
+.card-assets { border-top: 6rpx solid #FF9800; } .card-assets .card-value { color: #FF9800; }
+.card-steps { border-top: 6rpx solid #2196F3; } .card-steps .card-value { color: #2196F3; }
+.card-period { border-top: 6rpx solid #E91E63; } .card-period .card-value { color: #E91E63; }
+.card-custom { border-top: 6rpx solid #9C27B0; } .card-custom .card-value { color: #9C27B0; }
+
+/* ===== 快捷汇总卡 ===== */
+.quick-card {
+  background: #fff; border-radius: 32rpx; padding: 36rpx 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+.qc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32rpx; }
+.qc-title { font-size: 32rpx; font-weight: 700; color: #333; }
+.qc-more { font-size: 26rpx; color: #4CAF50; }
+.qc-row { display: flex; justify-content: space-around; text-align: center; }
+.qc-value { font-size: 44rpx; font-weight: 700; display: block; }
+.qc-label { font-size: 24rpx; color: #999; display: block; margin-top: 8rpx; }
+.green { color: #4CAF50; } .red { color: #F44336; }
+
+/* ===== 底部首页栏 ===== */
+.tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 120rpx; background: #fff; border-top: 1rpx solid #eee;
+  display: flex; align-items: center; flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom); z-index: 999;
+}
+.tab-item { flex: 1; text-align: center; color: #4CAF50; padding: 6rpx 0; }
+.tab-icon { font-size: 52rpx; display: block; margin-bottom: 2rpx; }
+.tab-label { font-size: 22rpx; display: block; }

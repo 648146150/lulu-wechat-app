@@ -1,7 +1,8 @@
-// 记账本小程序 - 入口文件
 App({
-  onLaunch() {
-    // 小程序启动时执行
-    console.log('记账本启动了');
+  onLaunch: function() {
+    console.log('工具箱启动');
+    if (wx.cloud) {
+      wx.cloud.init({ env: 'cloudbase-d7gypvgtm56308a81' });
+    }
   }
 });

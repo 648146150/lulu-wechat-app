@@ -1,0 +1,24 @@
+<view class="page">
+  <view class="month-bar">
+    <view class="mb-btn" bindtap="prevMonth">◀</view>
+    <text class="mb-text">{{currentYear}}年{{currentMonth}}月</text>
+    <view class="mb-btn {{isCurrentMonth?'disabled':''}}" bindtap="nextMonth">▶</view>
+    <view class="mbs"><text class="mi">收 {{monthIncome}}</text><text class="mo">支 {{monthExpense}}</text></view>
+  </view>
+  <view class="empty" wx:if="{{groups.length===0}}">
+    <text class="ei">📭</text><text class="et">{{currentMonth}}月还没有账单记录</text>
+    <view class="eb" bindtap="goAdd">去记一笔</view>
+  </view>
+  <view class="groups" wx:else>
+    <view class="group" wx:for="{{groups}}" wx:key="date">
+      <view class="gh"><text class="gd">{{item.date}}</text><text class="gs">收入 {{item.dayIncome}} | 支出 {{item.dayExpense}}</text></view>
+      <view class="grs">
+        <view class="ri" wx:for="{{item.records}}" wx:for-item="r" wx:key="id" bindlongpress="deleteRecord" data-id="{{r.id}}">
+          <view class="rl"><text class="re">{{r.emoji}}</text><view class="rif"><text class="rc">{{r.category}}</text><text class="rn" wx:if="{{r.note}}">{{r.note}}</text></view></view>
+          <text class="ra {{r.type==='income'?'money-income':'money-expense'}}">{{r.type==='income'?'+':'-'}}{{r.amount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="tip" wx:if="{{groups.length>0}}"><text>长按任意记录可删除</text></view>
+  </view>

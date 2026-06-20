@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="hero">
+    <text class="hl">净资产</text><text class="hv">¥ {{summary.netWorth}}</text>
+    <view class="hs"><text>总资产 ¥{{summary.totalAssets}}</text><text>负债 ¥{{summary.totalLiabilities}}</text></view>
+  </view>
+  <view class="bar"><text class="bt">账户列表({{summary.count}})</text><text class="ba" bindtap="onAdd">+ 添加账户</text></view>
+  <view class="empty" wx:if="{{list.length===0}}"><text class="ei">💰</text><text class="et">还没有添加账户</text></view>
+  <view class="list" wx:else>
+    <view class="item" wx:for="{{list}}" wx:key="id">
+      <view class="im {{item.type}}">{{item.typeIcon}}</view>
+      <view class="if">
+        <text class="in">{{item.name}}</text>
+        <text class="it">{{item.typeName}}<text wx:if="{{item.currencyNote}}"> · {{item.currencyNote}}</text><text wx:if="{{item.rateNote}}"> · {{item.rateNote}}</text><text wx:if="{{item.note}}"> · {{item.note}}</text></text>
+      </view>
+      <view class="ir">
+        <text class="iv {{item.cls}}">{{item.displayAmount}}</text>
+        <text class="ic" wx:if="{{item.cnyNote}}">{{item.cnyNote}}</text>
+        <view class="ia"><text bindtap="onEdit" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}" data-currency="{{item.currency}}" data-amount="{{item.amount}}" data-note="{{item.note}}">✏️</text><text bindtap="onDelete" data-id="{{item.id}}">🗑️</text></view>
+      </view>
+    </view>
+  </view>
+  </view>
+<view class="form-overlay {{showModal?'show':''}}" catchtap="closeModal">
+  <view class="form-sheet" catchtap="prevent">
+    <text class="ft">{{editingId?'编辑账户':'添加账户'}}</text>
+    <view class="fg"><text class="fl">账户名称</text><input class="fi" placeholder="例如：工商银行储蓄卡" value="{{form.name}}" bindinput="onField" data-field="name"/></view>
+    <view class="fg"><text class="fl">账户类型</text>
+      <view class="tt"><view class="tg {{form.type===item.key?'active':''}}" wx:for="{{types}}" wx:key="key" bindtap="onTypeSelect" data-type="{{item.key}}"><text class="tgi">{{item.icon}}</text><text>{{item.name}}</text></view></view>
+    </view>
+    <view class="fg" wx:if="{{form.type==='forex'}}"><text class="fl">币种</text>
+      <view class="tt"><view class="tg {{form.currency===item.code?'active':''}}" wx:for="{{currencies}}" wx:key="code" bindtap="onCurrencySelect" data-code="{{item.code}}"><text>{{item.symbol}}</text><text> {{item.code}}</text></view></view>
+      <text class="fx-rate" wx:if="{{rateText}}">{{rateText}}</text>
+    </view>
+    <view class="fg"><text class="fl">金额（负债填负数）</text><input class="fi" type="digit" placeholder="0.00" value="{{form.amountText}}" bindinput="onField" data-field="amountText"/></view>
+    <view class="fg"><text class="fl">备注（选填）</text><input class="fi" placeholder="例如：工资卡、尾号3392" value="{{form.note}}" bindinput="onField" data-field="note"/></view>
+    <view class="fb"><button class="fbc" bindtap="closeModal">取消</button><button class="fbs" bindtap="onSave">{{editingId?'保存':'添加'}}</button></view>
+  </view>
+</view>

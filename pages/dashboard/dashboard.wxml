@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="time-row">
+    <view>
+      <text class="time-date">{{dateText}}</text>
+      <text class="time-week">{{weekdayText}}</text>
+    </view>
+    <text class="time-clock">{{timeText}}</text>
+  </view>
+
+  <view class="weather-strip" wx:if="{{weather.temp}}">
+    <text class="w-emoji">{{weather.icon}}</text>
+    <text class="w-temp">{{weather.temp}}°</text>
+    <view class="w-info">
+      <text class="w-desc">{{weather.text}}</text>
+      <text class="w-city">{{weather.city}}</text>
+    </view>
+    <view class="w-meta">
+      <text>体感 {{weather.feelsLike}}°</text>
+      <text>💧 {{weather.humidity}}%</text>
+      <text>🌬 {{weather.windDir}}{{weather.windScale}}级</text>
+    </view>
+  </view>
+
+  <view class="tool-grid {{gridCols}}">
+    <view class="tool-card card-{{item.color}}"
+          wx:for="{{cards}}" wx:key="key"
+          bindtap="onCardTap" data-page="{{item.page}}" data-key="{{item.key}}"
+          bindlongpress="{{item.key === 'custom' ? '' : 'onCardLongPress'}}" data-index="{{index}}">
+      <text class="card-hint" wx:if="{{item.key !== 'custom'}}">长按替换</text>
+      <text class="card-icon">{{item.icon}}</text>
+      <text class="card-label">{{item.label}}</text>
+      <text class="card-value" wx:if="{{item.key !== 'assets'}}">{{item.value}}</text>
+      <view class="card-value card-assets-val" wx:else catchtap="toggleAssets">
+        <text>{{showAssets ? item.value : '***'}}</text>
+        <text class="eye-icon">{{showAssets ? '👁️' : '👁️‍🗨️'}}</text>
+      </view>
+      <text class="card-sub">{{item.sub}}</text>
+    </view>
+  </view>
+
+  <view class="quick-card" bindtap="goBookkeeping">
+    <view class="qc-header">
+      <text class="qc-title">📊 本月账单快览</text>
+      <text class="qc-more">详情 ›</text>
+    </view>
+    <view class="qc-row">
+      <view class="qc-item">
+        <text class="qc-value green">+{{bookkeeping.income}}</text>
+        <text class="qc-label">收入</text>
+      </view>
+      <view class="qc-item">
+        <text class="qc-value red">-{{bookkeeping.expense}}</text>
+        <text class="qc-label">支出</text>
+      </view>
+      <view class="qc-item">
+        <text class="qc-value {{bookkeeping.balance >= 0 ? 'green' : 'red'}}">{{bookkeeping.balance >= 0 ? '+' : ''}}{{bookkeeping.balance}}</text>
+        <text class="qc-label">结余</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部首页栏 -->
+  <view class="tab-bar">
+    <view class="tab-item active">
+      <text class="tab-icon">🏠</text>
+      <text class="tab-label">首页</text>
+    </view>
+  </view>
+</view>
