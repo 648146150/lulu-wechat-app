@@ -33,9 +33,19 @@
 .card-icon { font-size: 72rpx; margin-bottom: 20rpx; display: block; }
 .card-label { font-size: 30rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; display: block; }
 .card-value { font-weight: 600; font-size: 44rpx; display: block; margin-bottom: 8rpx; }
-.card-assets-val { display: flex; align-items: center; gap: 12rpx; }
-.eye-icon { font-size: 32rpx; }
+.card-label-row { display: flex; align-items: center; gap: 10rpx; margin-bottom: 12rpx; }
+.card-label-row .card-label { margin-bottom: 0; }
+.eye-icon { font-size: 26rpx; flex-shrink: 0; opacity: 0.5; }
 .card-sub { font-size: 22rpx; color: #999; display: block; }
+
+/* 3列模式：缩小字体适配窄卡片 */
+.tool-grid.cols3 .tool-card { padding: 32rpx 24rpx; }
+.tool-grid.cols3 .card-icon { font-size: 56rpx; margin-bottom: 14rpx; }
+.tool-grid.cols3 .card-label { font-size: 26rpx; margin-bottom: 8rpx; }
+.tool-grid.cols3 .card-value { font-size: 36rpx; }
+.tool-grid.cols3 .eye-icon { font-size: 22rpx; }
+.tool-grid.cols3 .card-sub { font-size: 20rpx; }
+.tool-grid.cols3 .card-hint { top: 10rpx; right: 12rpx; font-size: 18rpx; }
 
 /* 长按提示 */
 .card-hint { position: absolute; top: 14rpx; right: 18rpx; font-size: 20rpx; color: #ccc; }

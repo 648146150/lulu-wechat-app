@@ -28,12 +28,12 @@
           bindlongpress="{{item.key === 'custom' ? '' : 'onCardLongPress'}}" data-index="{{index}}">
       <text class="card-hint" wx:if="{{item.key !== 'custom'}}">长按替换</text>
       <text class="card-icon">{{item.icon}}</text>
-      <text class="card-label">{{item.label}}</text>
-      <text class="card-value" wx:if="{{item.key !== 'assets'}}">{{item.value}}</text>
-      <view class="card-value card-assets-val" wx:else catchtap="toggleAssets">
-        <text>{{showAssets ? item.value : '***'}}</text>
-        <text class="eye-icon">{{showAssets ? '👁️' : '👁️‍🗨️'}}</text>
+      <view class="card-label-row" wx:if="{{item.key === 'assets'}}">
+        <text class="card-label">{{item.label}}</text>
+        <text class="eye-icon" catchtap="toggleAssets">{{showAssets ? '👁️' : '👁️‍🗨️'}}</text>
       </view>
+      <text class="card-label" wx:else>{{item.label}}</text>
+      <text class="card-value">{{item.key === 'assets' ? (showAssets ? item.value : '***') : item.value}}</text>
       <text class="card-sub">{{item.sub}}</text>
     </view>
   </view>
