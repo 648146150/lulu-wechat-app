@@ -3,7 +3,7 @@ function ld(){ var s=wx.getStorageSync(SK); return (s&&s.length>=1)?s:DEF.slice(
 function sv(s){ wx.setStorageSync(SK,s); }
 
 var TOOLS={
-  bookkeeping:{icon:'📊',label:'记账本'},assets:{icon:'💰',label:'总资产'},
+  bookkeeping:{icon:'📊',label:'记账本'},assets:{icon:'💰',label:'资产记录'},
   steps:{icon:'🚶',label:'步数'},period:{icon:'📅',label:'经期记录'},custom:{icon:'⚙️',label:'自定义'}
 };
 
@@ -12,7 +12,7 @@ Page({
     slots:[],tools:TOOLS,
     toolOptions:[
       {key:'bookkeeping',icon:'📊',label:'记账本',desc:'收支记录·月度统计'},
-      {key:'assets',icon:'💰',label:'总资产',desc:'多账户汇总·净资产'},
+      {key:'assets',icon:'💰',label:'资产记录',desc:'多账户汇总·净资产'},
       {key:'steps',icon:'🚶',label:'步数',desc:'微信运动·每日统计'},
       {key:'period',icon:'📅',label:'经期记录',desc:'日历标记·周期预测'}
     ],

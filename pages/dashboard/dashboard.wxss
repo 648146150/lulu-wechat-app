@@ -33,6 +33,8 @@
 .card-icon { font-size: 72rpx; margin-bottom: 20rpx; display: block; }
 .card-label { font-size: 30rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; display: block; }
 .card-value { font-weight: 600; font-size: 44rpx; display: block; margin-bottom: 8rpx; }
+.card-assets-val { display: flex; align-items: center; gap: 12rpx; }
+.eye-icon { font-size: 32rpx; }
 .card-sub { font-size: 22rpx; color: #999; display: block; }
 
 /* 长按提示 */

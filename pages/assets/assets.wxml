@@ -8,10 +8,14 @@
   <view class="list" wx:else>
     <view class="item" wx:for="{{list}}" wx:key="id">
       <view class="im {{item.type}}">{{item.typeIcon}}</view>
-      <view class="if"><text class="in">{{item.name}}</text><text class="it">{{item.typeName}}·{{item.note}}</text></view>
+      <view class="if">
+        <text class="in">{{item.name}}</text>
+        <text class="it">{{item.typeName}}<text wx:if="{{item.currencyNote}}"> · {{item.currencyNote}}</text><text wx:if="{{item.rateNote}}"> · {{item.rateNote}}</text><text wx:if="{{item.note}}"> · {{item.note}}</text></text>
+      </view>
       <view class="ir">
         <text class="iv {{item.cls}}">{{item.displayAmount}}</text>
-        <view class="ia"><text bindtap="onEdit" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}" data-amount="{{item.amount}}" data-note="{{item.note}}">✏️</text><text bindtap="onDelete" data-id="{{item.id}}">🗑️</text></view>
+        <text class="ic" wx:if="{{item.cnyNote}}">{{item.cnyNote}}</text>
+        <view class="ia"><text bindtap="onEdit" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}" data-currency="{{item.currency}}" data-amount="{{item.amount}}" data-note="{{item.note}}">✏️</text><text bindtap="onDelete" data-id="{{item.id}}">🗑️</text></view>
       </view>
     </view>
   </view>
@@ -22,6 +26,10 @@
     <view class="fg"><text class="fl">账户名称</text><input class="fi" placeholder="例如：工商银行储蓄卡" value="{{form.name}}" bindinput="onField" data-field="name"/></view>
     <view class="fg"><text class="fl">账户类型</text>
       <view class="tt"><view class="tg {{form.type===item.key?'active':''}}" wx:for="{{types}}" wx:key="key" bindtap="onTypeSelect" data-type="{{item.key}}"><text class="tgi">{{item.icon}}</text><text>{{item.name}}</text></view></view>
+    </view>
+    <view class="fg" wx:if="{{form.type==='forex'}}"><text class="fl">币种</text>
+      <view class="tt"><view class="tg {{form.currency===item.code?'active':''}}" wx:for="{{currencies}}" wx:key="code" bindtap="onCurrencySelect" data-code="{{item.code}}"><text>{{item.symbol}}</text><text> {{item.code}}</text></view></view>
+      <text class="fx-rate" wx:if="{{rateText}}">{{rateText}}</text>
     </view>
     <view class="fg"><text class="fl">金额（负债填负数）</text><input class="fi" type="digit" placeholder="0.00" value="{{form.amountText}}" bindinput="onField" data-field="amountText"/></view>
     <view class="fg"><text class="fl">备注（选填）</text><input class="fi" placeholder="例如：工资卡、尾号3392" value="{{form.note}}" bindinput="onField" data-field="note"/></view>

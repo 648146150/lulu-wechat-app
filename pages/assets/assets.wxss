@@ -14,6 +14,7 @@
 .ir{text-align:right;flex-shrink:0;}
 .iv{font-size:30rpx;font-weight:600;display:block;}
 .iv.green{color:#4CAF50;}.iv.red{color:#F44336;}
+.ic{font-size:22rpx;color:#999;display:block;margin-top:4rpx;}
 .ia{margin-top:6rpx;display:flex;gap:12rpx;justify-content:flex-end;font-size:28rpx;}
 .form-overlay{display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,0.4);z-index:999;}
 .form-overlay.show{display:flex;align-items:flex-end;}
@@ -26,6 +27,7 @@
 .tg{padding:16rpx 28rpx;font-size:26rpx;color:#666;background:#f5f5f5;border-radius:36rpx;display:flex;align-items:center;gap:10rpx;}
 .tg.active{background:#E8F5E9;color:#4CAF50;font-weight:600;}
 .tgi{font-size:28rpx;}
+.fx-rate{font-size:24rpx;color:#999;margin-top:14rpx;display:block;}
 .fb{display:flex;gap:20rpx;margin-top:16rpx;}
 .fbc{flex:1;background:#f5f5f5;border:none;border-radius:20rpx;padding:20rpx;font-size:28rpx;color:#999;text-align:center;}
 .fbs{flex:1;background:#4CAF50;border:none;border-radius:20rpx;padding:20rpx;font-size:28rpx;color:#fff;text-align:center;}

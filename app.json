@@ -19,9 +19,6 @@
   "permission": {
     "scope.userLocation": {
       "desc": "用于获取当前位置的天气信息"
-    },
-    "scope.werun": {
-      "desc": "用于获取微信运动步数"
     }
   },
   "sitemapLocation": "sitemap.json"
