@@ -67,8 +67,14 @@ function queryWeather(adcode, cityName, callback) {
 
 /** 格式化城市名，如 "北京·朝阳区" / "深圳·南山区" */
 function formatCity(comp) {
-  var city = (comp.city || comp.province || '北京').replace('市', '');
+  // 高德 API 返回的 city/province 可能是数组（如直辖市）或字符串，统一转字符串
+  var raw = comp.city || comp.province || '北京';
+  if (Array.isArray(raw)) raw = raw[0] || '北京';
+  if (typeof raw !== 'string') raw = String(raw);
+  var city = raw.replace('市', '');
   var district = comp.district || '';
+  if (Array.isArray(district)) district = district[0] || '';
+  if (typeof district !== 'string') district = String(district);
   if (district && district !== city && district !== city + '市') {
     return city + '·' + district;
   }

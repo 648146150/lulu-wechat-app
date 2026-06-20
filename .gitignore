@@ -1,12 +1,6 @@
-# 私有配置文件（含个人 AppID 等敏感信息）
-project.private.config.json
-
 # 微信开发者工具生成
 *.log
 .DS_Store
-
-# 私有配置（含 API Key）
-utils/config.js
 
 # Office 临时文件
 ~$*
