@@ -1,4 +1,4 @@
-.page{padding:24rpx 24rpx 160rpx;}
+.page{padding:24rpx;}
 .type-switch{display:flex;background:#fff;border-radius:24rpx;padding:8rpx;margin-bottom:28rpx;}
 .ts-item{flex:1;text-align:center;padding:20rpx 0;border-radius:20rpx;font-size:28rpx;color:#666;}
 .ts-item.active{color:#fff;font-weight:700;}.ts-item.expense{background:#F44336;}.ts-item.income{background:#4CAF50;}

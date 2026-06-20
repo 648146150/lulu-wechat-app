@@ -21,11 +21,12 @@
     </view>
   </view>
 
-  <view class="tool-grid">
+  <view class="tool-grid {{gridCols}}">
     <view class="tool-card card-{{item.color}}"
           wx:for="{{cards}}" wx:key="key"
           bindtap="onCardTap" data-page="{{item.page}}" data-key="{{item.key}}"
           bindlongpress="{{item.key === 'custom' ? '' : 'onCardLongPress'}}" data-index="{{index}}">
+      <text class="card-hint" wx:if="{{item.key !== 'custom'}}">长按替换</text>
       <text class="card-icon">{{item.icon}}</text>
       <text class="card-label">{{item.label}}</text>
       <text class="card-value">{{item.value}}</text>
@@ -36,7 +37,7 @@
   <view class="quick-card" bindtap="goBookkeeping">
     <view class="qc-header">
       <text class="qc-title">📊 本月账单快览</text>
-      <text class="qc-more">详情</text>
+      <text class="qc-more">详情 ›</text>
     </view>
     <view class="qc-row">
       <view class="qc-item">
@@ -51,6 +52,14 @@
         <text class="qc-value {{bookkeeping.balance >= 0 ? 'green' : 'red'}}">{{bookkeeping.balance >= 0 ? '+' : ''}}{{bookkeeping.balance}}</text>
         <text class="qc-label">结余</text>
       </view>
+    </view>
+  </view>
+
+  <!-- 底部首页栏 -->
+  <view class="tab-bar">
+    <view class="tab-item active">
+      <text class="tab-icon">🏠</text>
+      <text class="tab-label">首页</text>
     </view>
   </view>
 </view>

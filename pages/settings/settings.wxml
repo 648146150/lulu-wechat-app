@@ -12,8 +12,7 @@
   </view>
   <view class="add" wx:if="{{slots.length<6}}" bindtap="onAdd"><text>+ 添加槽位</text></view>
   <view class="max" wx:else><text>已达上限 6 个</text></view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>
 <view class="modal {{showPicker?'show':''}}" catchtap="closePicker">
   <view class="mc" catchtap="prevent">
     <text class="mt">选择工具</text>

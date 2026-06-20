@@ -5,9 +5,13 @@ Page({
     var that=this;
     wx.getWeRunData({
       success:function(r){
+        if (!wx.cloud) { that.render({today:0,history:[]}); return; }
         wx.cloud.callFunction({
           name:'getWeRunData', data:{ encryptedData:r.encryptedData, iv:r.iv },
-          success:function(cr){ if(cr.result&&cr.result.stepInfoList){ var l=cr.result.stepInfoList; l.sort(function(a,b){return b.timestamp-a.timestamp;}); that.render({today:l[0]?l[0].step:0,history:l.slice(0,7)}); } },
+          success:function(cr){
+            if(cr.result&&cr.result.stepInfoList){ var l=cr.result.stepInfoList; l.sort(function(a,b){return b.timestamp-a.timestamp;}); that.render({today:l[0]?l[0].step:0,history:l.slice(0,7)}); }
+            else { that.render({today:0,history:[]}); }
+          },
           fail:function(){ that.render({today:0,history:[]}); }
         });
       },

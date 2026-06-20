@@ -31,7 +31,7 @@ Page({
   data: {
     timeText:'',dateText:'',weekdayText:'',
     weather:{temp:'',feelsLike:'',text:'',icon:'',city:'',windDir:'',windScale:'',humidity:''},
-    cards:[], bookkeeping:{income:'0',expense:'0',balance:'0'}
+    cards:[], gridCols:'cols2', bookkeeping:{income:'0',expense:'0',balance:'0'}
   },
   onShow:function(){
     this.tick(); this.loadWeather(); this.loadCards(); this.loadBookkeeping();
@@ -49,7 +49,7 @@ Page({
   loadCards:function(){
     var slots=loadSlots();
     var cards=slots.map(function(k){ var t=TOOLS[k]||TOOLS.custom; var v=cardVal(k); return {key:k,icon:t.icon,label:t.label,color:t.color,page:t.page,value:v.value,sub:v.sub}; });
-    this.setData({cards:cards});
+    this.setData({cards:cards, gridCols:slots.length<=4?'cols2':'cols3'});
   },
   loadBookkeeping:function(){
     var n=new Date(), s=storage.getMonthSummary(n.getFullYear(),n.getMonth()+1);

@@ -17,5 +17,4 @@
     <text class="ct2">历史记录</text>
     <view class="hi2" wx:for="{{history}}" wx:key="id"><text>{{item.startDate}}→{{item.endDate}}</text><text class="hd" bindtap="onDelete" data-id="{{item.id}}">🗑️</text></view>
   </view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>

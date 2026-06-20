@@ -14,5 +14,4 @@
     </view>
     <text class="empty" wx:else>暂无步数数据</text>
   </view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>

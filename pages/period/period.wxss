@@ -1,6 +1,6 @@
-.page{padding:24rpx 24rpx 160rpx;}
+.page{padding:24rpx;}
 .hero{background:linear-gradient(135deg,#E91E63,#F06292);border-radius:36rpx;padding:48rpx;margin-bottom:32rpx;color:#fff;text-align:center;}
-.hl{font-size:26rpx;opacity:0.85;}.hv{font-size:96rpx;font-weight:200;display:block;margin:16rpx 0;}.hi{font-size:26rpx;opacity:0.8;}
+.hl{font-size:26rpx;opacity:0.85;}.hv{font-size:96rpx;font-weight:300;display:block;margin:16rpx 0;}.hi{font-size:26rpx;opacity:0.8;}
 .card{background:#fff;border-radius:32rpx;padding:32rpx;margin-bottom:28rpx;}
 .cn{display:flex;align-items:center;justify-content:center;margin-bottom:24rpx;gap:40rpx;}
 .ca{font-size:28rpx;color:#4CAF50;}.ca.disabled{color:#ccc;}.ct{font-size:32rpx;font-weight:700;color:#333;}

@@ -21,5 +21,4 @@
     <picker mode="date" value="{{date}}" bindchange="onDate"><view class="dp"><text>{{date}}</text><text class="da">›</text></view></picker>
   </view>
   <view class="save"><button class="sb {{type==='income'?'si':'se'}}" bindtap="saveRecord">保存</button></view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>

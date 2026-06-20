@@ -1,8 +1,13 @@
-var KEY = '7d5b561a823a01cfdc5fdc788114b8ad';
+var KEY = require('./config').AMAP_KEY;
 var EMOJI = { '晴':'☀️','多云':'⛅','阴':'☁️','小雨':'🌧️','中雨':'🌧️','大雨':'🌧️','暴雨':'🌧️','雷阵雨':'⛈️','阵雨':'🌦️','小雪':'🌨️','中雪':'❄️','大雪':'❄️','雾':'🌫️','霾':'🌫️' };
 function toEmoji(t){ if(EMOJI[t])return EMOJI[t]; if(t.indexOf('雨')!==-1)return'🌧️'; if(t.indexOf('雪')!==-1)return'❄️'; if(t.indexOf('云')!==-1)return'⛅'; if(t.indexOf('晴')!==-1)return'☀️'; if(t.indexOf('阴')!==-1)return'☁️'; if(t.indexOf('雾')!==-1||t.indexOf('霾')!==-1)return'🌫️'; return'🌈'; }
 function fmt(comp){
-  var c=(comp.city||comp.province||'北京').replace('市',''), d=comp.district||'';
+  var raw=comp.city||comp.province||'北京';
+  if(Array.isArray(raw))raw=raw[0]||'北京';
+  if(typeof raw!=='string')raw=String(raw);
+  var c=raw.replace('市',''), d=comp.district||'';
+  if(Array.isArray(d))d=d[0]||'';
+  if(typeof d!=='string')d=String(d);
   if(d&&d!==c&&d!==c+'市')return c+'·'+d; return c;
 }
 function query(adcode,cityName,cb){

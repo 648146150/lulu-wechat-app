@@ -27,5 +27,4 @@
       <text class="ra {{item.type==='income'?'money-income':'money-expense'}}">{{item.type==='income'?'+':'-'}}{{item.amount}}</text>
     </view>
   </view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>

@@ -15,14 +15,13 @@
       </view>
     </view>
   </view>
-  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
-</view>
+  </view>
 <view class="form-overlay {{showModal?'show':''}}" catchtap="closeModal">
   <view class="form-sheet" catchtap="prevent">
     <text class="ft">{{editingId?'编辑账户':'添加账户'}}</text>
     <view class="fg"><text class="fl">账户名称</text><input class="fi" placeholder="例如：工商银行储蓄卡" value="{{form.name}}" bindinput="onField" data-field="name"/></view>
     <view class="fg"><text class="fl">账户类型</text>
-      <view class="tt"><text class="tg {{form.type===item.key?'active':''}}" wx:for="{{types}}" wx:key="key" bindtap="onTypeSelect" data-type="{{item.key}}">{{item.icon}} {{item.name}}</text></view>
+      <view class="tt"><view class="tg {{form.type===item.key?'active':''}}" wx:for="{{types}}" wx:key="key" bindtap="onTypeSelect" data-type="{{item.key}}"><text class="tgi">{{item.icon}}</text><text>{{item.name}}</text></view></view>
     </view>
     <view class="fg"><text class="fl">金额（负债填负数）</text><input class="fi" type="digit" placeholder="0.00" value="{{form.amountText}}" bindinput="onField" data-field="amountText"/></view>
     <view class="fg"><text class="fl">备注（选填）</text><input class="fi" placeholder="例如：工资卡、尾号3392" value="{{form.note}}" bindinput="onField" data-field="note"/></view>

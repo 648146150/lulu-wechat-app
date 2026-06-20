@@ -1,4 +1,4 @@
-.page{padding:24rpx 24rpx 160rpx;}
+.page{padding:24rpx;}
 .month-selector{display:flex;align-items:center;justify-content:center;padding:16rpx 0 32rpx;}
 .ms-btn{width:64rpx;height:64rpx;display:flex;align-items:center;justify-content:center;font-size:28rpx;color:#4CAF50;background:#fff;border-radius:50%;}
 .ms-btn.disabled{color:#ccc;}.ms-text{font-size:32rpx;font-weight:700;color:#333;margin:0 40rpx;}
