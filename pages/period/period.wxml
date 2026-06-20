@@ -1,0 +1,21 @@
+<view class="page">
+  <view class="hero">
+    <text class="hl">距离下次预计</text>
+    <text class="hv">{{prediction.daysUntil!==null?prediction.daysUntil:'--'}} 天</text>
+    <text class="hi" wx:if="{{prediction.predictedDate}}">上次 {{prediction.lastStart}}·周期{{prediction.avgCycle}}天·预测{{prediction.predictedDate}}</text>
+    <text class="hi" wx:else>还没有记录，点击日历开始</text>
+  </view>
+  <view class="card">
+    <view class="cn"><text class="ca" bindtap="prevMonth">◀</text><text class="ct">{{calYear}}年{{calMonth}}月</text><text class="ca {{isCurrentMonth?'disabled':''}}" bindtap="nextMonth">▶</text></view>
+    <view class="cg">
+      <text class="ch" wx:for="{{weekHeaders}}" wx:key="*this">{{item}}</text>
+      <view class="cd {{item.cls}}" wx:for="{{calDays}}" wx:key="index" data-date="{{item.date}}" bindtap="onDayTap"><text>{{item.day}}</text></view>
+    </view>
+    <view class="cl"><text>🟣 经期</text><text>🟠 预测</text><text>🔲 今天</text></view>
+  </view>
+  <view class="card" wx:if="{{history.length>0}}">
+    <text class="ct2">历史记录</text>
+    <view class="hi2" wx:for="{{history}}" wx:key="id"><text>{{item.startDate}}→{{item.endDate}}</text><text class="hd" bindtap="onDelete" data-id="{{item.id}}">🗑️</text></view>
+  </view>
+  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
+</view>

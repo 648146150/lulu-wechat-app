@@ -1,12 +1,17 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/add/add",
-    "pages/history/history"
+    "pages/dashboard/dashboard",
+    "pages/bookkeeping/index/index",
+    "pages/bookkeeping/add/add",
+    "pages/bookkeeping/history/history",
+    "pages/assets/assets",
+    "pages/period/period",
+    "pages/steps/steps",
+    "pages/settings/settings"
   ],
   "window": {
     "navigationBarBackgroundColor": "#4CAF50",
-    "navigationBarTitleText": "记账本",
+    "navigationBarTitleText": "工具箱",
     "navigationBarTextStyle": "white"
   },
   "permission": {

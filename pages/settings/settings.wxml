@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="info">已显示 {{slots.length}}/6 个卡片</view>
+  <view class="slot-row" wx:for="{{slots}}" wx:key="*this">
+    <text class="sn">{{index+1}}</text>
+    <text class="si">{{tools[item].icon}}</text>
+    <text class="sn2">{{tools[item].label}}</text>
+    <block wx:if="{{item==='custom'}}"><text class="sl">不可替换</text></block>
+    <block wx:else>
+      <text class="sb" bindtap="onReplace" data-index="{{index}}">替换</text>
+      <text class="sd" wx:if="{{slots.length>1}}" bindtap="onRemove" data-index="{{index}}">×</text>
+    </block>
+  </view>
+  <view class="add" wx:if="{{slots.length<6}}" bindtap="onAdd"><text>+ 添加槽位</text></view>
+  <view class="max" wx:else><text>已达上限 6 个</text></view>
+  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
+</view>
+<view class="modal {{showPicker?'show':''}}" catchtap="closePicker">
+  <view class="mc" catchtap="prevent">
+    <text class="mt">选择工具</text>
+    <view class="po" wx:for="{{toolOptions}}" wx:key="key" bindtap="onSelect" data-key="{{item.key}}">
+      <text class="poi">{{item.icon}}</text><view class="pof"><text class="pon">{{item.label}}</text><text class="pod">{{item.desc}}</text></view>
+      <text class="poc" wx:if="{{item.key===slots[pickIndex]}}">✓</text>
+    </view>
+    <button class="pc" bindtap="closePicker">取消</button>
+  </view>
+</view>

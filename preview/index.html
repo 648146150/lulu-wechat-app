@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工具箱 · UI 预览</title>
+<style>
+/* ===== 全局 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #e0e0e0;
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.phone-frame {
+  width: 375px; height: 812px;
+  background: #f5f5f5;
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 16px 56px rgba(0,0,0,0.22);
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.status-bar {
+  height: 44px; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #333; font-weight: 600;
+  flex-shrink: 0; letter-spacing: 1px;
+}
+.page-area {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 16px; padding-bottom: 20px;
+  scroll-behavior: smooth;
+}
+.page-area::-webkit-scrollbar { width: 0; }
+
+/* ===== 视图面板 ===== */
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+
+/* ===== 时间条 ===== */
+.time-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 6px 4px 14px;
+}
+.time-date { font-size: 26px; font-weight: 700; color: #333; }
+.time-week { font-size: 14px; color: #999; margin-left: 8px; font-weight: 400; }
+.time-clock { font-size: 22px; font-weight: 600; color: #333; }
+
+/* ===== 天气条 ===== */
+.weather-strip {
+  background: linear-gradient(135deg, #4A90D9, #6DB3F2);
+  border-radius: 18px; padding: 18px 22px; margin-bottom: 18px;
+  display: flex; align-items: center; color: #fff;
+  box-shadow: 0 4px 14px rgba(74,144,217,0.2);
+}
+.weather-strip .w-emoji { font-size: 46px; margin-right: 14px; }
+.weather-strip .w-temp { font-size: 38px; font-weight: 300; margin-right: 12px; }
+.weather-strip .w-info { display: flex; flex-direction: column; }
+.weather-strip .w-desc { font-size: 16px; opacity: 0.9; }
+.weather-strip .w-city { font-size: 12px; opacity: 0.65; margin-top: 2px; }
+.weather-strip .w-meta { margin-left: auto; text-align: right; font-size: 12px; opacity: 0.65; line-height: 1.6; }
+
+/* ===== 卡片网格 ===== */
+.tool-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 18px;
+}
+.tool-card {
+  background: #fff; border-radius: 16px; padding: 20px 16px;
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.tool-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+.tool-card:active { transform: scale(0.97); }
+.tool-card .card-icon { font-size: 36px; margin-bottom: 10px; }
+.tool-card .card-label { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 6px; }
+.tool-card .card-value { font-size: 22px; font-weight: 600; }
+.tool-card .card-sub { font-size: 11px; color: #999; margin-top: 4px; }
+
+/* 各卡片配色 */
+.tool-card.card-bookkeeping { border-top: 3px solid #4CAF50; }
+.tool-card.card-bookkeeping .card-value { color: #4CAF50; }
+.tool-card.card-assets { border-top: 3px solid #FF9800; }
+.tool-card.card-assets .card-value { color: #FF9800; }
+.tool-card.card-steps { border-top: 3px solid #2196F3; }
+.tool-card.card-steps .card-value { color: #2196F3; }
+.tool-card.card-custom { border-top: 3px solid #9C27B0; }
+.tool-card.card-custom .card-value { color: #9C27B0; }
+
+/* 长按提示 */
+.tool-card .card-hint {
+  position: absolute; top: 8px; right: 10px;
+  font-size: 10px; color: #ccc; opacity: 0;
+  transition: opacity 0.2s;
+}
+.tool-card:hover .card-hint { opacity: 1; }
+
+/* ===== 快捷汇总卡 ===== */
+.summary-card {
+  background: #fff; border-radius: 16px; padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.summary-card .sc-title {
+  font-size: 16px; font-weight: 700; color: #333;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.summary-card .sc-title .sc-more { font-size: 13px; color: #4CAF50; cursor: pointer; font-weight: 400; }
+.summary-row {
+  display: flex; justify-content: space-around; text-align: center;
+}
+.summary-row .sr-item .sr-label { font-size: 12px; color: #999; margin-bottom: 4px; }
+.summary-row .sr-item .sr-value { font-size: 22px; font-weight: 700; }
+.sr-value.green { color: #4CAF50; }
+.sr-value.red { color: #F44336; }
+
+/* ===== 详情页头部 ===== */
+.detail-header {
+  display: flex; align-items: center; margin-bottom: 16px;
+}
+.detail-back {
+  width: 34px; height: 34px; line-height: 34px; text-align: center;
+  font-size: 24px; color: #4CAF50; cursor: pointer; border-radius: 50%;
+  flex-shrink: 0;
+}
+.detail-back:hover { background: #e8e8e8; }
+.detail-title { font-size: 20px; font-weight: 700; color: #333; margin-left: 6px; }
+.detail-action {
+  margin-left: auto; font-size: 14px; color: #4CAF50;
+  cursor: pointer; font-weight: 500;
+}
+
+/* ===== 通用卡片 ===== */
+.card {
+  background: #fff; border-radius: 16px; padding: 20px;
+  margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+/* ===== 资产页 ===== */
+.asset-summary {
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  border-radius: 18px; padding: 24px; margin-bottom: 16px; color: #fff;
+  text-align: center; box-shadow: 0 4px 14px rgba(255,152,0,0.2);
+}
+.asset-summary .as-label { font-size: 13px; opacity: 0.85; }
+.asset-summary .as-value { font-size: 44px; font-weight: 300; margin: 8px 0; }
+.asset-summary .as-split { display: flex; justify-content: center; gap: 28px; font-size: 13px; opacity: 0.8; }
+
+.asset-item {
+  display: flex; align-items: center; padding: 16px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+.asset-item:last-child { border-bottom: none; }
+.asset-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-right: 14px; flex-shrink: 0;
+}
+.asset-icon.bank { background: #E3F2FD; }
+.asset-icon.stock { background: #FFF3E0; }
+.asset-icon.forex { background: #E8F5E9; }
+.asset-icon.cash { background: #F3E5F5; }
+.asset-info { flex: 1; }
+.asset-name { font-size: 15px; font-weight: 600; color: #333; }
+.asset-type { font-size: 12px; color: #999; margin-top: 2px; }
+.asset-value { font-size: 17px; font-weight: 600; color: #333; text-align: right; }
+
+/* ===== 经期页 ===== */
+.period-summary {
+  background: linear-gradient(135deg, #E91E63, #F06292);
+  border-radius: 18px; padding: 24px; margin-bottom: 16px; color: #fff;
+  text-align: center; box-shadow: 0 4px 14px rgba(233,30,99,0.2);
+}
+.period-summary .ps-label { font-size: 13px; opacity: 0.85; }
+.period-summary .ps-countdown { font-size: 48px; font-weight: 300; margin: 8px 0; }
+.period-summary .ps-info { font-size: 13px; opacity: 0.8; }
+
+/* 简易日历 */
+.mini-calendar {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+  text-align: center; padding: 8px 0;
+}
+.mini-calendar .cal-header { font-size: 12px; color: #999; padding: 6px 0; }
+.mini-calendar .cal-day {
+  font-size: 14px; color: #333; padding: 8px 0; border-radius: 50%;
+  cursor: pointer; transition: background 0.15s;
+}
+.mini-calendar .cal-day:hover { background: #f0f0f0; }
+.mini-calendar .cal-day.period { background: #FCE4EC; color: #E91E63; font-weight: 600; }
+.mini-calendar .cal-day.today { border: 2px solid #E91E63; }
+.mini-calendar .cal-day.predicted { background: #FFF3E0; color: #FF9800; }
+
+/* ===== 步数页 ===== */
+.steps-hero {
+  background: linear-gradient(135deg, #2196F3, #64B5F6);
+  border-radius: 18px; padding: 32px 24px; margin-bottom: 16px; color: #fff;
+  text-align: center; box-shadow: 0 4px 14px rgba(33,150,243,0.2);
+}
+.steps-hero .sh-label { font-size: 13px; opacity: 0.85; }
+.steps-hero .sh-value { font-size: 64px; font-weight: 200; margin: 4px 0; letter-spacing: -2px; }
+.steps-hero .sh-goal { font-size: 13px; opacity: 0.7; }
+.steps-hero .sh-bar {
+  width: 100%; height: 6px; background: rgba(255,255,255,0.25);
+  border-radius: 3px; margin-top: 16px; overflow: hidden;
+}
+.steps-hero .sh-bar-fill { height: 100%; background: #fff; border-radius: 3px; width: 84%; }
+
+.steps-chart {
+  display: flex; align-items: flex-end; justify-content: space-around;
+  height: 120px; padding: 8px 0;
+}
+.steps-chart .bar-col { text-align: center; flex: 1; }
+.steps-chart .bar-col .bar {
+  width: 28px; margin: 0 auto; border-radius: 8px 8px 0 0;
+  background: #BBDEFB; min-height: 6px; transition: height 0.3s;
+}
+.steps-chart .bar-col .bar.today { background: #2196F3; }
+.steps-chart .bar-col .bar-label { font-size: 11px; color: #999; margin-top: 6px; }
+.steps-chart .bar-col .bar-val { font-size: 10px; color: #666; }
+
+/* ===== 设置页 ===== */
+.settings-section { margin-bottom: 20px; }
+.settings-section .ss-title { font-size: 14px; color: #999; margin-bottom: 10px; padding-left: 4px; }
+.slot-row {
+  display: flex; align-items: center; background: #fff;
+  border-radius: 14px; padding: 16px; margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.slot-pos { font-size: 20px; font-weight: 700; color: #ccc; width: 30px; text-align: center; }
+.slot-icon { font-size: 28px; margin: 0 14px; }
+.slot-name { flex: 1; font-size: 15px; font-weight: 600; color: #333; }
+.slot-select {
+  font-size: 13px; color: #4CAF50; padding: 6px 12px;
+  border: 1px solid #4CAF50; border-radius: 20px; cursor: pointer;
+  background: #fff;
+}
+.slot-select:hover { background: #E8F5E9; }
+
+/* ===== 底部 TabBar ===== */
+.tab-bar {
+  height: 60px; background: #fff; border-top: 1px solid #eee;
+  display: flex; align-items: center; flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab-item {
+  flex: 1; text-align: center; cursor: pointer;
+  padding: 6px 0; color: #999; font-size: 11px;
+  transition: color 0.2s;
+}
+.tab-item .tab-icon { font-size: 26px; display: block; margin-bottom: 1px; }
+.tab-item.active { color: #4CAF50; }
+
+/* ===== 工具选择弹窗 ===== */
+.modal-overlay {
+  display: none; position: absolute; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 100;
+  justify-content: center; align-items: flex-end;
+}
+.modal-overlay.show { display: flex; }
+.modal-sheet {
+  width: 100%; background: #fff; border-radius: 20px 20px 0 0;
+  padding: 24px 20px 40px; animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-sheet .ms-title { font-size: 17px; font-weight: 700; color: #333; text-align: center; margin-bottom: 20px; }
+.tool-option {
+  display: flex; align-items: center; padding: 14px 8px;
+  border-radius: 12px; cursor: pointer; margin-bottom: 4px;
+}
+.tool-option:hover { background: #f5f5f5; }
+.tool-option .to-icon { font-size: 28px; margin-right: 14px; width: 36px; text-align: center; }
+.tool-option .to-name { font-size: 16px; font-weight: 600; color: #333; }
+.tool-option .to-desc { font-size: 12px; color: #999; margin-top: 2px; }
+.tool-option .to-check { margin-left: auto; color: #4CAF50; font-size: 20px; }
+.modal-cancel {
+  width: 100%; padding: 14px; margin-top: 12px;
+  background: #f5f5f5; border: none; border-radius: 12px;
+  font-size: 16px; color: #999; cursor: pointer;
+}
+
+/* ===== 资产表单弹层 ===== */
+.form-overlay {
+  display: none; position: absolute; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 200;
+  justify-content: center; align-items: flex-end;
+}
+.form-overlay.show { display: flex; }
+.form-sheet {
+  width: 100%; background: #fff; border-radius: 20px 20px 0 0;
+  padding: 28px 24px 50px; animation: slideUp 0.25s ease;
+}
+.form-title { font-size: 18px; font-weight: 700; color: #333; text-align: center; margin-bottom: 24px; }
+.form-group { margin-bottom: 20px; }
+.form-label { font-size: 13px; color: #999; margin-bottom: 8px; display: block; }
+.form-input {
+  width: 100%; padding: 14px 16px; font-size: 16px; color: #333;
+  background: #f5f5f5; border: none; border-radius: 12px; outline: none;
+  box-sizing: border-box;
+}
+.form-input:focus { background: #eee; }
+.type-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.type-tag {
+  padding: 10px 16px; font-size: 14px; color: #666;
+  background: #f5f5f5; border-radius: 20px; cursor: pointer;
+  transition: all 0.15s;
+}
+.type-tag.active { background: #E8F5E9; color: #4CAF50; font-weight: 600; }
+.form-btns { display: flex; gap: 14px; margin-top: 8px; }
+.form-btn-cancel {
+  flex: 1; padding: 16px; font-size: 16px; color: #999;
+  background: #f5f5f5; border: none; border-radius: 14px; cursor: pointer;
+}
+.form-btn-save {
+  flex: 1; padding: 16px; font-size: 16px; color: #fff;
+  background: #4CAF50; border: none; border-radius: 14px; cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">9:41</div>
+
+  <div class="page-area" id="pageArea">
+
+    <!-- ==================== 仪表盘 ==================== -->
+    <div class="view-panel active" id="dashboard">
+      <!-- 时间 + 日期 -->
+      <div class="time-row">
+        <span><span class="time-date">6月20日</span><span class="time-week">周五</span></span>
+        <span class="time-clock">14:32</span>
+      </div>
+
+      <!-- 天气 -->
+      <div class="weather-strip">
+        <span class="w-emoji">🌤️</span>
+        <span class="w-temp">28°</span>
+        <span class="w-info">
+          <span class="w-desc">多云</span>
+          <span class="w-city">📍 北京·东城</span>
+        </span>
+        <span class="w-meta">
+          体感 30°<br>💧 45%<br>🌬 南风2级
+        </span>
+      </div>
+
+      <!-- 2×2 工具卡片 -->
+      <div class="tool-grid" id="toolGrid">
+        <!-- JS 动态渲染 -->
+      </div>
+
+      <!-- 记账快捷汇总 -->
+      <div class="summary-card">
+        <div class="sc-title">
+          <span>📊 本月账单快览</span>
+          <span class="sc-more" onclick="openTool('bookkeeping')">详情 ›</span>
+        </div>
+        <div class="summary-row">
+          <div class="sr-item">
+            <div class="sr-label">收入</div>
+            <div class="sr-value green">+3,500</div>
+          </div>
+          <div class="sr-item">
+            <div class="sr-label">支出</div>
+            <div class="sr-value red">-2,180</div>
+          </div>
+          <div class="sr-item">
+            <div class="sr-label">结余</div>
+            <div class="sr-value green">+1,320</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 记账本详情 ==================== -->
+    <div class="view-panel" id="bookkeeping">
+      <div class="detail-header">
+        <span class="detail-back" onclick="goDashboard()">‹</span>
+        <span class="detail-title">📊 记账本</span>
+        <span class="detail-action" onclick="openTool('bookkeeping-add')">+ 记一笔</span>
+      </div>
+      <!-- 月份切换 -->
+      <div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;gap:16px;">
+        <span style="color:#4CAF50;font-size:20px;cursor:pointer;">◀</span>
+        <span style="font-size:18px;font-weight:700;color:#333;">2026年6月</span>
+        <span style="color:#ccc;font-size:20px;">▶</span>
+      </div>
+      <!-- 汇总 -->
+      <div class="card" style="background:linear-gradient(135deg,#43A047,#66BB6A);color:#fff;text-align:center;">
+        <div style="display:flex;justify-content:space-around;">
+          <div><div style="opacity:0.85;font-size:12px;">收入</div><div style="font-size:28px;font-weight:700;">+3,500</div></div>
+          <div><div style="opacity:0.85;font-size:12px;">支出</div><div style="font-size:28px;font-weight:700;">-2,180</div></div>
+          <div><div style="opacity:0.85;font-size:12px;">结余</div><div style="font-size:28px;font-weight:700;">+1,320</div></div>
+        </div>
+      </div>
+      <!-- 分类排行模拟 -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:14px;">支出分类排行</div>
+        <div style="display:flex;align-items:center;padding:8px 0;font-size:14px;">
+          <span>🍽️</span><span style="width:60px;margin-left:8px;">餐饮</span>
+          <span style="flex:1;margin:0 12px;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;"><span style="display:block;height:100%;background:#F44336;border-radius:4px;width:42%;"></span></span>
+          <span style="color:#666;">¥915</span><span style="color:#999;width:40px;text-align:right;">42%</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:8px 0;font-size:14px;">
+          <span>🚗</span><span style="width:60px;margin-left:8px;">交通</span>
+          <span style="flex:1;margin:0 12px;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;"><span style="display:block;height:100%;background:#F44336;border-radius:4px;width:25%;"></span></span>
+          <span style="color:#666;">¥545</span><span style="color:#999;width:40px;text-align:right;">25%</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:8px 0;font-size:14px;">
+          <span>🛍️</span><span style="width:60px;margin-left:8px;">购物</span>
+          <span style="flex:1;margin:0 12px;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;"><span style="display:block;height:100%;background:#F44336;border-radius:4px;width:18%;"></span></span>
+          <span style="color:#666;">¥392</span><span style="color:#999;width:40px;text-align:right;">18%</span>
+        </div>
+      </div>
+      <!-- 最近记录 -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:14px;">最近记录</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f5f5;">
+          <span>🍽️ <span style="margin-left:8px;">餐饮</span><span style="font-size:12px;color:#999;margin-left:8px;">6月20日</span></span>
+          <span style="color:#F44336;font-weight:600;">-50</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f5f5;">
+          <span>🚗 <span style="margin-left:8px;">交通</span><span style="font-size:12px;color:#999;margin-left:8px;">6月19日</span></span>
+          <span style="color:#F44336;font-weight:600;">-30</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;">
+          <span>💰 <span style="margin-left:8px;">工资</span><span style="font-size:12px;color:#999;margin-left:8px;">6月18日</span></span>
+          <span style="color:#4CAF50;font-weight:600;">+3,500</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 总资产详情 ==================== -->
+    <div class="view-panel" id="assets">
+      <div class="detail-header">
+        <span class="detail-back" onclick="goDashboard()">‹</span>
+        <span class="detail-title">💰 总资产</span>
+        <span class="detail-action" onclick="showAssetForm()">+ 添加账户</span>
+      </div>
+      <!-- 净资产 -->
+      <div class="asset-summary">
+        <div class="as-label">净资产</div>
+        <div class="as-value" id="assetNetWorth">¥ 58,320</div>
+        <div class="as-split">
+          <span>总资产 ¥72,000</span><span>负债 ¥13,680</span>
+        </div>
+      </div>
+      <!-- 账户列表 -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:14px;">账户列表</div>
+        <div class="asset-item">
+          <div class="asset-icon bank">🏦</div>
+          <div class="asset-info"><div class="asset-name">工商银行储蓄卡</div><div class="asset-type">储蓄 · 尾号 3392</div></div>
+          <div class="asset-value" style="color:#4CAF50;">¥ 35,000</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-icon stock">📈</div>
+          <div class="asset-info"><div class="asset-name">华泰证券</div><div class="asset-type">股票 · 3只持仓</div></div>
+          <div class="asset-value" style="color:#FF9800;">¥ 22,000</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-icon bank">🏦</div>
+          <div class="asset-info"><div class="asset-name">招商银行信用卡</div><div class="asset-type">信用卡 · 尾号 6712</div></div>
+          <div class="asset-value" style="color:#F44336;">-¥ 13,680</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-icon forex">💱</div>
+          <div class="asset-info"><div class="asset-name">美元账户</div><div class="asset-type">外汇 · $2,000 ≈ ¥15,000</div></div>
+          <div class="asset-value" style="color:#4CAF50;">¥ 15,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 资产表单弹层 ========== -->
+    <div class="form-overlay" id="assetFormOverlay" onclick="hideAssetForm(event)">
+      <div class="form-sheet" onclick="event.stopPropagation()">
+        <div class="form-title">添加账户</div>
+
+        <div class="form-group">
+          <div class="form-label">账户名称</div>
+          <input class="form-input" type="text" placeholder="例如：工商银行储蓄卡" />
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">账户类型</div>
+          <div class="type-row">
+            <span class="type-tag active">🏦 储蓄</span>
+            <span class="type-tag">📈 股票</span>
+            <span class="type-tag">💼 基金</span>
+            <span class="type-tag">💱 外汇</span>
+            <span class="type-tag">💵 现金</span>
+            <span class="type-tag">📦 其他</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">金额（负债填负数）</div>
+          <input class="form-input" type="number" placeholder="0.00" />
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">备注（选填）</div>
+          <input class="form-input" type="text" placeholder="例如：工资卡、尾号 3392" />
+        </div>
+
+        <div class="form-btns">
+          <button class="form-btn-cancel" onclick="hideAssetForm()">取消</button>
+          <button class="form-btn-save" onclick="hideAssetForm()">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 经期记录详情 ==================== -->
+    <div class="view-panel" id="period">
+      <div class="detail-header">
+        <span class="detail-back" onclick="goDashboard()">‹</span>
+        <span class="detail-title">📅 经期记录</span>
+      </div>
+      <!-- 倒计时 -->
+      <div class="period-summary">
+        <div class="ps-label">距离下次预计</div>
+        <div class="ps-countdown">14 天</div>
+        <div class="ps-info">上次 6月20日 · 周期 28天 · 预测 7月18日</div>
+      </div>
+      <!-- 日历 -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="cursor:pointer;color:#999;">◀</span>
+          <span style="font-size:18px;font-weight:700;color:#333;">2026年6月</span>
+          <span style="cursor:pointer;color:#999;">▶</span>
+        </div>
+        <div class="mini-calendar">
+          <div class="cal-header">日</div><div class="cal-header">一</div><div class="cal-header">二</div><div class="cal-header">三</div><div class="cal-header">四</div><div class="cal-header">五</div><div class="cal-header">六</div>
+          <!-- 第一周 -->
+          <div class="cal-day" style="color:#ccc;">31</div>
+          <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day period">6</div>
+          <!-- 第二周 -->
+          <div class="cal-day period">7</div><div class="cal-day period">8</div><div class="cal-day period">9</div><div class="cal-day period">10</div><div class="cal-day">11</div><div class="cal-day">12</div><div class="cal-day">13</div>
+          <!-- 第三周 -->
+          <div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day today">20</div>
+          <!-- 第四周 -->
+          <div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div>
+          <!-- 第五周 -->
+          <div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+          <div class="cal-day predicted">1</div><div class="cal-day predicted">2</div><div class="cal-day predicted">3</div><div class="cal-day predicted">4</div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:14px;font-size:12px;">
+          <span>🟣 经期</span><span>🟠 预测下次</span><span>🔲 今天</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 步数详情 ==================== -->
+    <div class="view-panel" id="steps">
+      <div class="detail-header">
+        <span class="detail-back" onclick="goDashboard()">‹</span>
+        <span class="detail-title">🚶 步数</span>
+      </div>
+      <div class="steps-hero">
+        <div class="sh-label">今日步数</div>
+        <div class="sh-value">8,432</div>
+        <div class="sh-goal">目标 10,000 步 · 完成 84%</div>
+        <div class="sh-bar"><div class="sh-bar-fill" style="width:84%;"></div></div>
+      </div>
+      <!-- 近7天 -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:14px;">近 7 天</div>
+        <div class="steps-chart">
+          <div class="bar-col"><div class="bar today" style="height:80px;"></div><div class="bar-val">8,432</div><div class="bar-label">五</div></div>
+          <div class="bar-col"><div class="bar" style="height:95px;"></div><div class="bar-val">11,203</div><div class="bar-label">四</div></div>
+          <div class="bar-col"><div class="bar" style="height:60px;"></div><div class="bar-val">7,891</div><div class="bar-label">三</div></div>
+          <div class="bar-col"><div class="bar" style="height:72px;"></div><div class="bar-val">9,102</div><div class="bar-label">二</div></div>
+          <div class="bar-col"><div class="bar" style="height:50px;"></div><div class="bar-val">6,530</div><div class="bar-label">一</div></div>
+          <div class="bar-col"><div class="bar" style="height:40px;"></div><div class="bar-val">5,021</div><div class="bar-label">日</div></div>
+          <div class="bar-col"><div class="bar" style="height:88px;"></div><div class="bar-val">10,876</div><div class="bar-label">六</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 设置页 ==================== -->
+    <div class="view-panel" id="settings">
+      <div class="detail-header">
+        <span class="detail-back" onclick="goDashboard()">‹</span>
+        <span class="detail-title">⚙️ 自定义首页卡片</span>
+      </div>
+      <div id="settingsContent"></div>
+    </div>
+
+  </div>
+
+  <!-- ==================== 工具选择弹窗 ==================== -->
+  <div class="modal-overlay" id="pickerModal" onclick="hidePicker(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="ms-title">选择工具</div>
+      <div class="tool-option" onclick="selectTool('bookkeeping')">
+        <span class="to-icon">📊</span><span><div class="to-name">记账本</div><div class="to-desc">收支记录 · 月度统计</div></span>
+        <span class="to-check" id="check-bookkeeping">✓</span>
+      </div>
+      <div class="tool-option" onclick="selectTool('assets')">
+        <span class="to-icon">💰</span><span><div class="to-name">总资产</div><div class="to-desc">多账户汇总 · 净资产</div></span>
+        <span class="to-check" id="check-assets">✓</span>
+      </div>
+      <div class="tool-option" onclick="selectTool('steps')">
+        <span class="to-icon">🚶</span><span><div class="to-name">步数</div><div class="to-desc">微信运动 · 每日统计</div></span>
+        <span class="to-check" id="check-steps">✓</span>
+      </div>
+      <div class="tool-option" onclick="selectTool('period')">
+        <span class="to-icon">📅</span><span><div class="to-name">经期记录</div><div class="to-desc">日历标记 · 周期预测</div></span>
+        <span class="to-check" id="check-period">✓</span>
+      </div>
+      <button class="modal-cancel" onclick="closePicker()">取消</button>
+    </div>
+  </div>
+
+  <!-- ==================== 底部 TabBar ==================== -->
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-item active" data-view="dashboard" onclick="goDashboard()">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">首页</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== 工具定义 =====
+var tools = {
+  bookkeeping: { icon:'📊', label:'记账本', value:'¥2,180', sub:'本月支出 · 56笔', css:'card-bookkeeping', page:'bookkeeping' },
+  assets:      { icon:'💰', label:'总资产', value:'¥58,320', sub:'净资产 · 5个账户', css:'card-assets', page:'assets' },
+  steps:       { icon:'🚶', label:'步数',   value:'8,432',  sub:'今日步数 · 目标10,000', css:'card-steps', page:'steps' },
+  period:      { icon:'📅', label:'经期记录', value:'14天',   sub:'距离下次预计', css:'card-custom', page:'period' },
+  custom:      { icon:'⚙️', label:'自定义', value:'+',       sub:'管理工具', css:'card-custom', page:'settings' }
+};
+
+var MAX_SLOTS = 6;
+var MIN_SLOTS = 1; // 至少 自定义
+var slots = ['bookkeeping','assets','steps','custom']; // 默认 4 个
+var pickSlot = 0;
+
+// 仪表盘卡片网格列数
+function gridCols() { return slots.length <= 4 ? 2 : 3; }
+
+// 渲染仪表盘卡片
+function renderCards() {
+  var grid = document.getElementById('toolGrid');
+  grid.style.gridTemplateColumns = 'repeat('+gridCols()+', 1fr)';
+  var html = '';
+  slots.forEach(function(toolId, i) {
+    var t = tools[toolId] || tools.custom;
+    var isCustom = toolId === 'custom';
+    html += '<div class="tool-card '+t.css+'" onclick="openTool(\''+t.page+'\')" oncontextmenu="event.preventDefault();'+(isCustom?'':'showPicker('+i+')')+'">';
+    if (!isCustom) html += '<div class="card-hint">长按替换</div>';
+    html += '<div class="card-icon">'+t.icon+'</div>';
+    html += '<div class="card-label">'+t.label+'</div>';
+    html += '<div class="card-value"'+(t.value==='+'?' style="font-size:28px"':'')+'>'+t.value+'</div>';
+    html += '<div class="card-sub">'+t.sub+'</div>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// 渲染设置页
+function renderSlots() {
+  var html = '';
+  var canAdd = slots.length < MAX_SLOTS;
+  html += '<div class="settings-section"><div class="ss-title">已显示 '+slots.length+'/'+MAX_SLOTS+' 个卡片（长按卡片可替换，自定义不可替换）</div>';
+  slots.forEach(function(toolId, i) {
+    var t = tools[toolId] || tools.custom;
+    var isCustom = toolId === 'custom';
+    html += '<div class="slot-row">';
+    html += '<span class="slot-pos">'+(i+1)+'</span>';
+    html += '<span class="slot-icon">'+t.icon+'</span>';
+    html += '<span class="slot-name">'+t.label+'</span>';
+    if (isCustom) {
+      html += '<span style="font-size:12px;color:#ccc;">不可替换</span>';
+    } else {
+      html += '<span class="slot-select" onclick="showPicker('+i+')">替换</span>';
+    }
+    // 删除按钮（非自定义且槽位数>1）
+    if (!isCustom && slots.length > 1) {
+      html += '<span style="margin-left:8px;font-size:18px;color:#ddd;cursor:pointer;" onclick="removeSlot('+i+')">×</span>';
+    }
+    html += '</div>';
+  });
+  // 添加新槽位
+  if (canAdd) {
+    html += '<div class="slot-row" style="border:2px dashed #ddd;justify-content:center;cursor:pointer;color:#4CAF50;font-weight:600;" onclick="addSlot()">';
+    html += '<span>+ 添加槽位（'+slots.length+'/'+MAX_SLOTS+'）</span>';
+    html += '</div>';
+  } else {
+    html += '<div style="text-align:center;color:#999;font-size:13px;padding:12px;">已达上限 6 个，长按卡片替换</div>';
+  }
+  if (slots.length > MIN_SLOTS + 3) {
+    html += '<div style="text-align:center;color:#bbb;font-size:12px;padding:6px;">自定义不能被删除或替换</div>';
+  }
+  html += '</div>';
+  document.getElementById('settingsContent').innerHTML = html;
+}
+
+function addSlot() {
+  if (slots.length >= MAX_SLOTS) return;
+  // 在自定义前面插入经期（或第一个未使用的工具）
+  var used = {};
+  slots.forEach(function(s){ used[s]=true; });
+  var candidates = ['period','bookkeeping','assets','steps'];
+  var toAdd = 'period';
+  for (var i=0; i<candidates.length; i++) {
+    if (!used[candidates[i]]) { toAdd = candidates[i]; break; }
+  }
+  var customIdx = slots.indexOf('custom');
+  slots.splice(customIdx, 0, toAdd);
+  renderCards(); renderSlots();
+}
+
+function removeSlot(idx) {
+  if (slots.length <= 1) return;
+  if (slots[idx] === 'custom') return;
+  slots.splice(idx, 1);
+  renderCards(); renderSlots();
+}
+
+// ===== 视图切换 =====
+function showView(id) {
+  document.querySelectorAll('.view-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  document.getElementById('pageArea').scrollTop = 0;
+  if (id === 'settings') renderSlots();
+}
+
+function goDashboard() {
+  showView('dashboard');
+  renderCards();
+}
+
+function openTool(id) {
+  showView(id);
+  if (id === 'settings') renderSlots();
+}
+
+// ===== 工具选择弹窗 =====
+function showPicker(slot) {
+  pickSlot = slot;
+  var cur = slots[slot];
+  ['bookkeeping','assets','steps','period'].forEach(function(t){
+    document.getElementById('check-'+t).style.display = (t === cur) ? 'inline' : 'none';
+  });
+  document.getElementById('pickerModal').classList.add('show');
+}
+function hidePicker(e) { if (e.target === e.currentTarget) closePicker(); }
+function closePicker() { document.getElementById('pickerModal').classList.remove('show'); }
+function selectTool(tool) {
+  var cur = slots[pickSlot];
+  if (tool === cur) { closePicker(); return; }
+  // 不能替换自定义
+  if (cur === 'custom') { closePicker(); return; }
+  // 如果选的工具已在其他槽位，交换
+  var otherIdx = slots.indexOf(tool);
+  if (otherIdx >= 0 && otherIdx !== pickSlot) {
+    slots[otherIdx] = cur;
+  }
+  slots[pickSlot] = tool;
+  closePicker();
+  renderCards();
+  renderSlots();
+}
+
+// 资产表单弹层
+function showAssetForm() { document.getElementById('assetFormOverlay').classList.add('show'); }
+function hideAssetForm(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('assetFormOverlay').classList.remove('show');
+}
+
+// 初始化
+renderCards();
+
+// 设置页内容容器（替换静态 HTML）
+document.addEventListener('DOMContentLoaded', function(){
+  var settingsPanel = document.getElementById('settings');
+  if (settingsPanel) {
+    // 清空设置页旧内容，改为动态渲染
+    var old = settingsPanel.querySelector('.settings-section');
+    if (old) old.parentNode.removeChild(old.parentNode.firstChild);
+  }
+});
+</script>
+
+</body>
+</html>

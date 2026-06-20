@@ -1,0 +1,18 @@
+<view class="page">
+  <view class="hero">
+    <text class="hl">今日步数</text><text class="hv">{{todaySteps}}</text>
+    <text class="hg">目标 {{goal}} 步·完成 {{percent}}%</text>
+    <view class="pb"><view class="pf" style="width:{{percent}}%;"></view></view>
+  </view>
+  <view class="card">
+    <text class="ct">近 7 天</text>
+    <view class="ch" wx:if="{{chartData.length>0}}">
+      <view class="bc" wx:for="{{chartData}}" wx:key="label">
+        <view class="br {{item.isToday?'today':''}}" style="height:{{item.height}}px;"></view>
+        <text class="bv">{{item.valText}}</text><text class="bl">{{item.label}}</text>
+      </view>
+    </view>
+    <text class="empty" wx:else>暂无步数数据</text>
+  </view>
+  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
+</view>

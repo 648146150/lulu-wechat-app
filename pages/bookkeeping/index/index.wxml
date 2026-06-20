@@ -1,0 +1,31 @@
+<view class="page">
+  <view class="month-selector">
+    <view class="ms-btn" bindtap="prevMonth">◀</view>
+    <text class="ms-text">{{currentYear}}年{{currentMonth}}月</text>
+    <view class="ms-btn {{isCurrentMonth?'disabled':''}}" bindtap="nextMonth">▶</view>
+  </view>
+  <view class="summary">
+    <view class="si"><text class="sl">收入</text><text class="sv money-income">+{{summary.income}}</text></view>
+    <view class="si"><text class="sl">支出</text><text class="sv money-expense">-{{summary.expense}}</text></view>
+    <view class="si"><text class="sl">结余</text><text class="sv {{summary.balance>=0?'money-income':'money-expense'}}">{{summary.balance>=0?'+':''}}{{summary.balance}}</text></view>
+  </view>
+  <view class="add-btn" bindtap="goAdd"><text class="ab-icon">+</text><text class="ab-text">记一笔</text></view>
+  <view class="card" wx:if="{{categoryList.length>0}}">
+    <text class="ct">支出分类排行</text><text class="cs">共 ¥{{categoryTotal}}</text>
+    <view class="cr" wx:for="{{categoryList}}" wx:key="category">
+      <text class="ce">{{item.emoji}}</text><text class="cn">{{item.category}}</text>
+      <view class="cbw"><view class="cbf" style="width:{{item.percent}}%;"></view></view>
+      <text class="ca">¥{{item.amountText}}</text><text class="cp">{{item.percent}}%</text>
+    </view>
+  </view>
+  <view class="card" wx:elif="{{summary.expense==0}}"><text class="me">这个月还没有支出记录</text></view>
+  <view class="card">
+    <view class="ch"><text class="ct">最近记录</text><text class="cm" bindtap="goHistory">查看全部</text></view>
+    <view class="empty" wx:if="{{recentRecords.length===0}}"><text class="ei">📝</text><text class="et">还没有记录，记一笔吧！</text></view>
+    <view class="ri" wx:for="{{recentRecords}}" wx:key="id">
+      <view class="rl"><text class="re">{{item.categoryEmoji}}</text><view class="rif"><text class="rc">{{item.category}}</text><text class="rd">{{item.date}}</text></view></view>
+      <text class="ra {{item.type==='income'?'money-income':'money-expense'}}">{{item.type==='income'?'+':'-'}}{{item.amount}}</text>
+    </view>
+  </view>
+  <view class="home-bar" bindtap="goHome"><view class="icon">🏠</view><view class="text">首页</view></view>
+</view>
